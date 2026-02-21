@@ -1,18 +1,14 @@
 # Գործիքների հավաքածու՝ մոդուլ
-
 import numpy as np
 import pandas as pd
 
 
-def read_file_pandas(filename, col_name):
+def read_file_pandas(filename):
     try:
         csv_file_data = pd.read_csv(filename)
-        return csv_file_data[col_name]
-    except KeyError:
-        print("KeyError: Column->", list(csv_file_data.columns), f"Provided -> {col_name}")
-        return None
+        return csv_file_data
     except FileNotFoundError:
-        print("Message-> ")
+        print("File not found!")
 
 
 def arr_avg(arr):
@@ -25,15 +21,20 @@ def min_max(arr):
     return mn, mx
 
 
-def get_column(file_path, col_name):
-    df = pd.read_csv(file_path)
-    return df(col_name)
+def get_column_from_csv(file_path, col_name):
+    csv_file_data = None
+    try:
+        csv_file_data = read_file_pandas(file_path)
+        if csv_file_data is None:
+            return None
+        return csv_file_data[col_name]
+    except KeyError:
+        print(f"KeyError: Column: {list(csv_file_data.columns)} Provided  {col_name}")
+        return None
 
 
 def print_column_names(df):
-    print("\n Columns of table")
-    for col in df.columns:
-        print(f" - {col}")
+    print(f"\n Columns of dataframe are: ", df.columns)
 
 
 def print_basic_info(df):
@@ -45,4 +46,4 @@ def analyze_missing_values(df):
     if missing_data.sum() == 0:
         print("All cells are filled")
     else:
-        print(missing_data[missing_data > 0])
+        print("All cells are empty")
